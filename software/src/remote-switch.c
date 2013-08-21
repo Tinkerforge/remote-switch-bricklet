@@ -64,13 +64,13 @@ void invocation(const ComType com, const uint8_t *data) {
 			return;
 		}
 
-		case FID_SET_TRIES: {
-			set_tries(com, (SetTries*)data);
+		case FID_SET_REPEATS: {
+			set_repeats(com, (SetRepeats*)data);
 			return;
 		}
 
-		case FID_GET_TRIES: {
-			get_tries(com, (GetTries*)data);
+		case FID_GET_REPEATS: {
+			get_repeats(com, (GetRepeats*)data);
 			return;
 		}
 
@@ -131,22 +131,22 @@ void get_switching_state(const ComType com, const GetSwitchingState *data) {
 	                               com);
 }
 
-void set_tries(const ComType com, const SetTries *data) {
-	BC->num_send = data->tries;
+void set_repeats(const ComType com, const SetRepeats *data) {
+	BC->num_send = data->repeats;
 	if(BC->state == RF_IDLE) {
-		BC->wait = data->tries;
+		BC->wait = data->repeats;
 	}
 	BA->com_return_setter(com, data);
 }
 
-void get_tries(const ComType com, const GetTries *data) {
-	GetTriesReturn gtr;
-	gtr.header        = data->header;
-	gtr.header.length = sizeof(GetTriesReturn);
-	gtr.tries         = BC->num_send;
+void get_repeats(const ComType com, const GetRepeats *data) {
+	GetRepeatsReturn grr;
+	grr.header        = data->header;
+	grr.header.length = sizeof(GetRepeatsReturn);
+	grr.repeats       = BC->num_send;
 
-	BA->send_blocking_with_timeout(&gtr,
-	                               sizeof(GetTriesReturn),
+	BA->send_blocking_with_timeout(&grr,
+	                               sizeof(GetRepeatsReturn),
 	                               com);
 }
 
@@ -282,7 +282,7 @@ void tick(const uint8_t tick_type) {
 		}
 	}
 
-	if(tick_type == TICK_TASK_TYPE_MESSAGE) {
+	if(tick_type & TICK_TASK_TYPE_MESSAGE) {
 		if(BC->switching_done) {
 			BC->switching_done = false;
 			SwitchingDone sd;

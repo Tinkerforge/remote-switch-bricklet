@@ -1084,8 +1084,8 @@ typedef enum {
 #define FID_SWITCH 1
 #define FID_GET_SWITCHING_STATE 2
 #define FID_SWITCHING_DONE 3
-#define FID_SET_TRIES 4
-#define FID_GET_TRIES 5
+#define FID_SET_REPEATS 4
+#define FID_GET_REPEATS 5
 
 typedef struct {
 	MessageHeader header;
@@ -1113,23 +1113,23 @@ typedef struct {
 
 typedef struct {
 	MessageHeader header;
-	uint8_t tries;
-} __attribute__((__packed__)) SetTries;
+	uint8_t repeats;
+} __attribute__((__packed__)) SetRepeats;
 
 typedef struct {
 	MessageHeader header;
-} __attribute__((__packed__)) GetTries;
+} __attribute__((__packed__)) GetRepeats;
 
 typedef struct {
 	MessageHeader header;
-	uint8_t tries;
-} __attribute__((__packed__)) GetTriesReturn;
+	uint8_t repeats;
+} __attribute__((__packed__)) GetRepeatsReturn;
 
 
 void switch_socket(const ComType com, const SwitchSocket *data);
 void get_switching_state(const ComType com, const GetSwitchingState *data);
-void set_tries(const ComType com, const SetTries *data);
-void get_tries(const ComType com, const GetTries *data);
+void set_repeats(const ComType com, const SetRepeats *data);
+void get_repeats(const ComType com, const GetRepeats *data);
 
 uint8_t spibb_transceive_byte(const uint8_t value);
 void rfm69_write_register(const uint8_t reg, const uint8_t *data, const uint8_t length);
