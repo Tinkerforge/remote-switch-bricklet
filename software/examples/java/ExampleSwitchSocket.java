@@ -15,8 +15,12 @@ public class ExampleSwitchSocket {
 		ipcon.connect(host, port); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Switch socket with house code 42 and receiver code 23 on
-		rs.switchSocket((short)42, (short)23, BrickletRemoteSwitch.SWITCH_TO_ON);
+		// Switch socket with house code 17 and receiver code 16 on.
+		// House code 17 is 10001 in binary and means that the
+		// DIP switches 1 and 5 are on and 2-4 are off.
+		// Receiver code 16 is 10000 in binary and means that the
+		// DIP switches A is on and B-E are off.
+		rs.switchSocket((short)17, (short)16, BrickletRemoteSwitch.SWITCH_TO_ON);
 
 		System.console().readLine("Press key to exit\n");
 	}
