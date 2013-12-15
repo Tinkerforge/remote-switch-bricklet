@@ -28,7 +28,7 @@ int main() {
 	// House code 17 is 10001 in binary and means that the
 	// DIP switches 1 and 5 are on and 2-4 are off.
 	// Receiver code 16 is 10000 in binary and means that the
-	// DIP switches A is on and B-E are off.
+	// DIP switch E is on and A-D are off.
 	remote_switch_switch_socket(&rs, 17, 16, REMOTE_SWITCH_SWITCH_TO_ON);
 
 	printf("Press key to exit\n");

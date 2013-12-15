@@ -20,7 +20,7 @@ ipcon.connect HOST, PORT # Connect to brickd
 # House code 17 is 10001 in binary and means that the
 # DIP switches 1 and 5 are on and 2-4 are off.
 # Receiver code 16 is 10000 in binary and means that the
-# DIP switches A is on and B-E are off.
+# DIP switches E is on and A-D are off.
 rs.switch_socket 17, 16, BrickletRemoteSwitch::SWITCH_TO_ON
 
 puts 'Press key to exit'
