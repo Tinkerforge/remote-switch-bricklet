@@ -52,15 +52,19 @@
 #define BRICKLET_NO_OFFSET
 #define INVOCATION_IN_BRICKLET_CODE
 
-#define RFM69_MESSAGE_LENGTH 16
+//#define RFM69_MESSAGE_LENGTH 16
+#define RFM69_MESSAGE_LENGTH_MAX 64
 
 typedef struct {
-	uint8_t rfm69_data[RFM69_MESSAGE_LENGTH];
+	uint8_t rfm69_data[RFM69_MESSAGE_LENGTH_MAX];
 	int32_t wait;
 	int32_t wait_packet;
 	RFState state;
 	uint8_t num_send;
 	bool switching_done;
+
+	SwitchingType current_type;
+	uint8_t current_packet_length;
 } BrickContext;
 
 #endif

@@ -1065,10 +1065,20 @@
 
 #define RFM69_DATA_FLOAT    0b10001110
 #define RFM69_DATA_ON       0b10001000
+#define RFM69_DATA_B_0      0b10100000
+#define RFM69_DATA_B_1      0b10000010
 #define RFM69_SWITCH_TO_OFF 0
 #define RFM69_SWITCH_TO_ON  1
 #define RFM69_READY         0
 #define RFM69_BUSY          1
+
+#define TYPE_B_DIM_SHIFT(data, array, index) do {\
+	(array)[(index)-1] |= (data) >> 4;\
+	(array)[(index)] = ((data) << 4) & 0xFF;\
+} while(0)
+
+#define TYPE_A_UPPER_BITS(x) (((x) >> 3) & 0x1F)
+#define TYPE_A_LOWER_BITS(x) (((x) << 5) & 0xE0)
 
 typedef enum {
 	RF_IDLE,
@@ -1078,6 +1088,24 @@ typedef enum {
 	RF_WAIT_AFTER_SEND
 } RFState;
 
+typedef enum {
+	TYPE_A = 0,
+	TYPE_B = 1,
+	TYPE_B_DIM = 2,
+} SwitchingType;
+
+#define NUM_TYPE_CONFIGURATIONS 3
+#define NUM_TYPES 3
+
+#define TYPE_A_PACKET_LENGTH 16
+#define TYPE_B_PACKET_LENGTH 38
+#define TYPE_B_DIM_PACKET_LENGTH 42
+
+#define TYPE_A_BITRATEMSB 0x28 // ~350us half clock cycle (0x32 = 400us)
+#define TYPE_A_BITRATELSB 0x00
+#define TYPE_B_BITRATEMSB 0x20 // ~260us half clock cycle
+#define TYPE_B_BITRATELSB 0x82
+
 #define NUM_WAIT_AFTER_SEND   200
 #define NUM_SEND_DEFAULT      5
 
@@ -1086,6 +1114,9 @@ typedef enum {
 #define FID_SWITCHING_DONE 3
 #define FID_SET_REPEATS 4
 #define FID_GET_REPEATS 5
+#define FID_SWITCH_SOCKET_A 6
+#define FID_SWITCH_SOCKET_B 7
+#define FID_DIM_SOCKET_B 8
 
 typedef struct {
 	MessageHeader header;
@@ -1125,12 +1156,37 @@ typedef struct {
 	uint8_t repeats;
 } __attribute__((__packed__)) GetRepeatsReturn;
 
+typedef struct {
+	MessageHeader header;
+	uint8_t house_code;
+	uint8_t receiver_code;
+	uint8_t switch_to;
+} __attribute__((__packed__)) SwitchSocketA;
+
+typedef struct {
+	MessageHeader header;
+	uint32_t address;
+	uint8_t unit;
+	uint8_t switch_to;
+} __attribute__((__packed__)) SwitchSocketB;
+
+typedef struct {
+	MessageHeader header;
+	uint32_t address;
+	uint8_t unit;
+	uint8_t dim_value;
+} __attribute__((__packed__)) DimSocketB;
+
 
 void switch_socket(const ComType com, const SwitchSocket *data);
 void get_switching_state(const ComType com, const GetSwitchingState *data);
 void set_repeats(const ComType com, const SetRepeats *data);
 void get_repeats(const ComType com, const GetRepeats *data);
+void switch_socket_a(const ComType com, const SwitchSocketA *data);
+void switch_socket_b(const ComType com, const SwitchSocketB *data);
+void dim_socket_b(const ComType com, const DimSocketB *data);
 
+void change_type(const SwitchingType type);
 uint8_t spibb_transceive_byte(const uint8_t value);
 void rfm69_write_register(const uint8_t reg, const uint8_t *data, const uint8_t length);
 void rfm69_read_register(const uint8_t reg, uint8_t *data, const uint8_t length);
