@@ -1089,7 +1089,7 @@ typedef enum {
 } RFState;
 
 typedef enum {
-	TYPE_A = 0,
+	TYPE_A_C = 0,
 	TYPE_B = 1,
 	TYPE_B_DIM = 2,
 } SwitchingType;
@@ -1097,12 +1097,12 @@ typedef enum {
 #define NUM_TYPE_CONFIGURATIONS 3
 #define NUM_TYPES 3
 
-#define TYPE_A_PACKET_LENGTH 16
+#define TYPE_A_C_PACKET_LENGTH 16
 #define TYPE_B_PACKET_LENGTH 38
 #define TYPE_B_DIM_PACKET_LENGTH 42
 
-#define TYPE_A_BITRATEMSB 0x28 // ~350us half clock cycle (0x32 = 400us)
-#define TYPE_A_BITRATELSB 0x00
+#define TYPE_A_C_BITRATEMSB 0x28 // ~350us half clock cycle (0x32 = 400us)
+#define TYPE_A_C_BITRATELSB 0x00
 #define TYPE_B_BITRATEMSB 0x20 // ~260us half clock cycle
 #define TYPE_B_BITRATELSB 0x82
 
@@ -1117,6 +1117,7 @@ typedef enum {
 #define FID_SWITCH_SOCKET_A 6
 #define FID_SWITCH_SOCKET_B 7
 #define FID_DIM_SOCKET_B 8
+#define FID_SWITCH_SOCKET_C 9
 
 typedef struct {
 	MessageHeader header;
@@ -1177,6 +1178,13 @@ typedef struct {
 	uint8_t dim_value;
 } __attribute__((__packed__)) DimSocketB;
 
+typedef struct {
+	MessageHeader header;
+	char system_code;
+	uint8_t device_code;
+	uint8_t switch_to;
+} __attribute__((__packed__)) SwitchSocketC;
+
 
 void switch_socket(const ComType com, const SwitchSocket *data);
 void get_switching_state(const ComType com, const GetSwitchingState *data);
@@ -1185,6 +1193,7 @@ void get_repeats(const ComType com, const GetRepeats *data);
 void switch_socket_a(const ComType com, const SwitchSocketA *data);
 void switch_socket_b(const ComType com, const SwitchSocketB *data);
 void dim_socket_b(const ComType com, const DimSocketB *data);
+void switch_socket_c(const ComType com, const SwitchSocketC *data);
 
 void change_type(const SwitchingType type);
 uint8_t spibb_transceive_byte(const uint8_t value);

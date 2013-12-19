@@ -35,8 +35,8 @@ const uint8_t rfm69_config[][2] = {
 //	{REG_FDEVMSB, 0x10}, // Frequency deviation
 //	{REG_FDEVLSB, 0x00},
 	{REG_DATAMODUL, RF_DATAMODUL_DATAMODE_PACKET | RF_DATAMODUL_MODULATIONTYPE_OOK | RF_DATAMODUL_MODULATIONSHAPING_00}, // Use OOK
-	{REG_BITRATEMSB, TYPE_A_BITRATEMSB},
-	{REG_BITRATELSB, TYPE_A_BITRATELSB},
+	{REG_BITRATEMSB, TYPE_A_C_BITRATEMSB},
+	{REG_BITRATELSB, TYPE_A_C_BITRATELSB},
 	{REG_PREAMBLEMSB, 0x00}, // no preamble
 	{REG_PREAMBLELSB, 0x00},
 	{REG_SYNCCONFIG, RF_SYNC_OFF}, // Use empty sync to assure small pause between commands
@@ -49,7 +49,7 @@ const uint8_t rfm69_config[][2] = {
 	{REG_SYNCVALUE7, 0},
 	{REG_SYNCVALUE8, 0},
 	{REG_PACKETCONFIG1, RF_PACKET1_FORMAT_VARIABLE | RF_PACKET1_DCFREE_OFF | RF_PACKET1_CRC_OFF},
-	{REG_PAYLOADLENGTH, TYPE_A_PACKET_LENGTH},
+	{REG_PAYLOADLENGTH, TYPE_A_C_PACKET_LENGTH},
 	{REG_FIFOTHRESH, RF_FIFOTHRESH_TXSTART_FIFONOTEMPTY}, // Set fifo threshold, send when threshold reached
 //	{REG_PALEVEL, RF_PALEVEL_OUTPUTPOWER_11111 | RF_PALEVEL_PA0_ON}, // w/o power amplifier
 	{REG_PALEVEL, RF_PALEVEL_OUTPUTPOWER_11111 | RF_PALEVEL_PA1_ON | RF_PALEVEL_PA2_ON}, // w/ power amplifier: PA 1 and 2 on, 20dBm
@@ -67,7 +67,7 @@ const uint8_t type_registers[NUM_TYPE_CONFIGURATIONS] = {
 };
 
 const uint8_t type_configurations[NUM_TYPES][NUM_TYPE_CONFIGURATIONS] = {
-	{TYPE_A_BITRATEMSB, TYPE_A_BITRATELSB, TYPE_A_PACKET_LENGTH},
+	{TYPE_A_C_BITRATEMSB, TYPE_A_C_BITRATELSB, TYPE_A_C_PACKET_LENGTH},
 	{TYPE_B_BITRATEMSB, TYPE_B_BITRATELSB, TYPE_B_PACKET_LENGTH},
 	{TYPE_B_BITRATEMSB, TYPE_B_BITRATELSB, TYPE_B_DIM_PACKET_LENGTH},
 };
@@ -109,6 +109,11 @@ void invocation(const ComType com, const uint8_t *data) {
 			return;
 		}
 
+		case FID_SWITCH_SOCKET_C: {
+			switch_socket_c(com, (SwitchSocketC*)data);
+			return;
+		}
+
 		default: {
 			BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
 			break;
@@ -134,10 +139,10 @@ void switch_socket_a(const ComType com, const SwitchSocketA *data) {
 		return;
 	}
 
-	change_type(TYPE_A);
+	change_type(TYPE_A_C);
 
 	const uint8_t house_code = data->house_code;
-	for(uint8_t i  = 0; i < 5; i++) {
+	for(uint8_t i = 0; i < 5; i++) {
 		if(house_code & (1 << i)) {
 			BC->rfm69_data[i] = RFM69_DATA_ON;
 		} else {
@@ -146,7 +151,7 @@ void switch_socket_a(const ComType com, const SwitchSocketA *data) {
 	}
 
 	const uint8_t receiver_code = data->receiver_code;
-	for(uint8_t i  = 0; i < 5; i++) {
+	for(uint8_t i = 0; i < 5; i++) {
 		if(receiver_code & (1 << i)) {
 			BC->rfm69_data[i+5] = RFM69_DATA_ON;
 		} else {
@@ -161,7 +166,6 @@ void switch_socket_a(const ComType com, const SwitchSocketA *data) {
 		BC->rfm69_data[10] = RFM69_DATA_FLOAT;
 		BC->rfm69_data[11] = RFM69_DATA_ON;
 	}
-
 
 	// Sync
 	BC->rfm69_data[12] = 0b10000000;
@@ -287,6 +291,70 @@ void dim_socket_b(const ComType com, const DimSocketB *data) {
 	BA->com_return_setter(com, data);
 }
 
+void switch_socket_c(const ComType com, const SwitchSocketC *data) {
+	if(BC->state != RF_IDLE) {
+		return;
+	}
+
+	uint8_t system_code;
+	if(data->system_code >= 'a' && data->system_code <= 'p') {
+		system_code = data->system_code - 'a';
+	} else if(data->system_code >= 'A' && data->system_code <= 'P') {
+		system_code = data->system_code - 'A';
+	} else {
+		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_INVALID_PARAMETER, com);
+		return;
+	}
+
+	if (data->device_code < 1 || data->device_code > 16) {
+		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_INVALID_PARAMETER, com);
+		return;
+	}
+
+	change_type(TYPE_A_C);
+
+	// System Code
+	for(uint8_t i = 0; i < 4; i++) {
+		if(system_code & (1 << i)) {
+			BC->rfm69_data[i] = RFM69_DATA_FLOAT;
+		} else {
+			BC->rfm69_data[i] = RFM69_DATA_ON;
+		}
+	}
+
+	// Device Code
+	const uint8_t device_code = data->device_code - 1;
+	for(uint8_t i = 0; i < 4; i++) {
+		if(device_code & (1 << i)) {
+			BC->rfm69_data[i+4] = RFM69_DATA_FLOAT;
+		} else {
+			BC->rfm69_data[i+4] = RFM69_DATA_ON;
+		}
+	}
+
+	// Fixed On+Float
+	BC->rfm69_data[8] = RFM69_DATA_ON;
+	BC->rfm69_data[9] = RFM69_DATA_FLOAT;
+
+	// On/Off
+	if(data->switch_to == RFM69_SWITCH_TO_ON) {
+		BC->rfm69_data[10] = RFM69_DATA_FLOAT;
+		BC->rfm69_data[11] = RFM69_DATA_FLOAT;
+	} else {
+		BC->rfm69_data[10] = RFM69_DATA_FLOAT;
+		BC->rfm69_data[11] = RFM69_DATA_ON;
+	}
+
+	// Sync
+	BC->rfm69_data[12] = 0b10000000;
+	BC->rfm69_data[13] = 0b00000000;
+	BC->rfm69_data[14] = 0b00000000;
+	BC->rfm69_data[15] = 0b00000000;
+
+	BC->state = RF_SENDING;
+	BA->com_return_setter(com, data);
+}
+
 void get_switching_state(const ComType com, const GetSwitchingState *data) {
 	GetSwitchingStateReturn gssr;
 	gssr.header        = data->header;
@@ -326,9 +394,9 @@ void rfm69_configure(void) {
 		rfm69_write_register(rfm69_config[i][0], &rfm69_config[i][1], 1);
 	}
 
-	// Default configuration is for type a
-	BC->current_type = TYPE_A;
-	BC->current_packet_length = TYPE_A_PACKET_LENGTH;
+	// Default configuration is for type a/c
+	BC->current_type = TYPE_A_C;
+	BC->current_packet_length = TYPE_A_C_PACKET_LENGTH;
 }
 
 void constructor(void) {
