@@ -1,0 +1,23 @@
+Needs["NETLink`"]
+LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
+
+host="localhost"
+port=4223
+uid="amb"(* Change to your UID *)
+
+(* Create IPConnection and device object *)
+ipcon=NETNew["Tinkerforge.IPConnection"]
+rs=NETNew["Tinkerforge.BrickletRemoteSwitch",uid,ipcon]
+ipcon@Connect[host,port]
+
+(* Switch socket with house code 17 and receiver code 1 on. *)
+(* House code 17 is 10001 in binary (least-significant bit first) *)
+(* and means that the DIP switches 1 and 5 are on and 2-4 are off. *)
+(* Receiver code 1 is 10000 in binary (least-significant bit first) *)
+(* and means that the DIP switch A is on and B-E are off. *)
+rs@SwitchSocketA[17,1,BrickletRemoteSwitch`SWITCHUTOUON]
+
+(* Clean up *)
+ipcon@Disconnect[]
+ReleaseNETObject[rs]
+ReleaseNETObject[ipcon]
