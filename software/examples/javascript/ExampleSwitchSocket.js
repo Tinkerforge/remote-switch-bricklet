@@ -1,12 +1,11 @@
-var IPConnection = require('Tinkerforge/IPConnection');
-var BrickletRemoteSwitch = require('Tinkerforge/BrickletRemoteSwitch');
+var Tinkerforge = require('tinkerforge');
 
 var HOST = 'localhost';
 var PORT = 4223;
 var UID = 'jKy';// Change to your UID
 
-var ipcon = new IPConnection();// Create IP connection
-var rs = new BrickletRemoteSwitch(UID, ipcon);// Create device object
+var ipcon = new Tinkerforge.IPConnection();// Create IP connection
+var rs = new Tinkerforge.BrickletRemoteSwitch(UID, ipcon);// Create device object
 
 ipcon.connect(HOST, PORT,
     function(error) {
@@ -15,7 +14,7 @@ ipcon.connect(HOST, PORT,
 );// Connect to brickd
 
 // Don't use device before ipcon is connected
-ipcon.on(IPConnection.CALLBACK_CONNECTED,
+ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function(connectReason) {
         // Switch socket with house code 17 and receiver code 1 on.
         // House code 17 is 10001 in binary (least-significant bit first)
