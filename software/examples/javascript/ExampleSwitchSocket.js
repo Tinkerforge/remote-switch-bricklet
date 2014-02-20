@@ -21,7 +21,7 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
         // and means that the DIP switches 1 and 5 are on and 2-4 are off.
         // Receiver code 1 is 10000 in binary (least-significant bit first)
         // and means that the DIP switch A is on and B-E are off.
-        rs.switchSocketA(17, 1, BrickletRemoteSwitch.SWITCH_TO_ON);       
+        rs.switchSocketA(17, 1, Tinkerforge.BrickletRemoteSwitch.SWITCH_TO_ON);       
     }
 );
 
