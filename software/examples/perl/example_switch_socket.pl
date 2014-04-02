@@ -16,7 +16,7 @@ $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Switch socket with house code 42 and receiver code 23 on
 $rs->switch_socket(42, 23, $rs->SWITCH_TO_ON);
 
-print "\nPress any key to exit...\n";
+print "Press any key to exit...\n";
 <STDIN>;
 $ipcon->disconnect();
 
