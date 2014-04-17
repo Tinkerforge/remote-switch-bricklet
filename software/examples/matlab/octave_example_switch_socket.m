@@ -18,6 +18,6 @@ function octave_example_switch_socket
     % and means that the DIP switch A is on and B-E are off.
     rs.switchSocketA(0, 31, rs.SWITCH_TO_ON);
 
-    input("\nPress any key to exit...\n", "s");
+    input("Press any key to exit...\n", "s");
     ipcon.disconnect();
 end
