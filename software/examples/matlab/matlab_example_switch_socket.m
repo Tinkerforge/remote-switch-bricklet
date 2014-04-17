@@ -1,4 +1,4 @@
-function matlab_example_switch_socket
+function matlab_example_switch_socket()
     import com.tinkerforge.IPConnection;
     import com.tinkerforge.BrickletRemoteSwtich;
 

@@ -1,4 +1,4 @@
-function octave_example_switch_socket
+function octave_example_switch_socket()
     more off;
     
     HOST = "localhost";
