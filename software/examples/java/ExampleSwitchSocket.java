@@ -22,6 +22,7 @@ public class ExampleSwitchSocket {
 		// and means that the DIP switch A is on and B-E are off.
 		rs.switchSocketA((short)17, (short)1, BrickletRemoteSwitch.SWITCH_TO_ON);
 
-		System.console().readLine("Press key to exit\n");
+		System.out.println("Press key to exit"); System.in.read();
+		ipcon.disconnect();
 	}
 }
