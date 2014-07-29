@@ -16,7 +16,7 @@ ipcon.connect(HOST, PORT,
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function(connectReason) {
-        // Switch socket with house code 17 and receiver code 1 on.
+        // Switch on a type A socket with house code 17 and receiver code 1.
         // House code 17 is 10001 in binary (least-significant bit first)
         // and means that the DIP switches 1 and 5 are on and 2-4 are off.
         // Receiver code 1 is 10000 in binary (least-significant bit first)
