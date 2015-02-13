@@ -20,7 +20,7 @@ Module ExampleSwitchSocket
         rs.SwitchSocketA(17, 1, BrickletRemoteSwitch.SWITCH_TO_ON)
 
         System.Console.WriteLine("Press key to exit")
-        System.Console.ReadKey()
+        System.Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module
