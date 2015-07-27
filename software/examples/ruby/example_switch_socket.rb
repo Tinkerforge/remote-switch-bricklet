@@ -25,3 +25,4 @@ rs.switch_socket_a 17, 1, BrickletRemoteSwitch::SWITCH_TO_ON
 
 puts 'Press key to exit'
 $stdin.gets
+ipcon.disconnect

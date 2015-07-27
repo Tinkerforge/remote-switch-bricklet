@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-  
+# -*- coding: utf-8 -*-
 
 HOST = "localhost"
 PORT = 4223
@@ -23,3 +23,4 @@ if __name__ == "__main__":
     rs.switch_socket_a(17, 1, RemoteSwitch.SWITCH_TO_ON)
 
     raw_input('Press key to exit\n') # Use input() in Python 3
+    ipcon.disconnect()

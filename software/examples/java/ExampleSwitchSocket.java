@@ -1,5 +1,5 @@
-import com.tinkerforge.BrickletRemoteSwitch;
 import com.tinkerforge.IPConnection;
+import com.tinkerforge.BrickletRemoteSwitch;
 
 public class ExampleSwitchSocket {
 	private static final String HOST = "localhost";

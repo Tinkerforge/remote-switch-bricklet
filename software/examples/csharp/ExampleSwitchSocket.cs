@@ -6,7 +6,7 @@ class Example
 	private static int PORT = 4223;
 	private static string UID = "XYZ"; // Change to your UID
 
-	static void Main() 
+	static void Main()
 	{
 		IPConnection ipcon = new IPConnection(); // Create IP connection
 		BrickletRemoteSwitch rs = new BrickletRemoteSwitch(UID, ipcon); // Create device object
@@ -21,7 +21,8 @@ class Example
 		// and means that the DIP switch A is on and B-E are off.
 		rs.SwitchSocketA(17, 1, BrickletRemoteSwitch.SWITCH_TO_ON);
 
-		System.Console.WriteLine("Press key to exit");
+		System.Console.WriteLine("Press enter to exit");
 		System.Console.ReadLine();
+		ipcon.Disconnect();
 	}
 }
