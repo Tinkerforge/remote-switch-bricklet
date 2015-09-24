@@ -1,9 +1,9 @@
 function octave_example_switch_socket()
     more off;
-    
+
     HOST = "localhost";
     PORT = 4223;
-    UID = "jzG"; % Change to your UID
+    UID = "XYZ"; % Change to your UID
 
     ipcon = java_new("com.tinkerforge.IPConnection"); % Create IP connection
     rs = java_new("com.tinkerforge.BrickletRemoteSwitch", UID, ipcon); % Create device object
@@ -18,6 +18,6 @@ function octave_example_switch_socket()
     % and means that the DIP switch A is on and B-E are off.
     rs.switchSocketA(17, 1, rs.SWITCH_TO_ON);
 
-    input("Press any key to exit...\n", "s");
+    input("Press key to exit\n", "s");
     ipcon.disconnect();
 end

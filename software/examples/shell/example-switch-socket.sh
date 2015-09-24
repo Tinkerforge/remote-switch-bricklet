@@ -1,8 +1,7 @@
 #!/bin/sh
-# connects to localhost:4223 by default, use --host and --port to change it
+# Connects to localhost:4223 by default, use --host and --port to change this
 
-# change to your UID
-uid=XYZ
+uid=XYZ # Change to your UID
 
 # Switch on a type A socket with house code 17 and receiver code 1.
 # House code 17 is 10001 in binary (least-significant bit first)

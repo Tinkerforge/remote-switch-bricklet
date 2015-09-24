@@ -25,5 +25,6 @@ $rs->switchSocketA(17, 1, BrickletRemoteSwitch::SWITCH_TO_ON);
 
 echo "Press key to exit\n";
 fgetc(fopen('php://stdin', 'r'));
+$ipcon->disconnect();
 
 ?>

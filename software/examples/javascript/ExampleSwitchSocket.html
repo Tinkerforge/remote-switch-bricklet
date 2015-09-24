@@ -34,13 +34,13 @@
                 var rs = new Tinkerforge.BrickletRemoteSwitch(UID, ipcon); // Create device object
                 ipcon.connect(HOST, PORT,
                     function(error) {
-                        textArea.value += 'Error: '+error+ '\n';
+                        textArea.value += 'Error: ' + error + '\n';
                     }
                 ); // Connect to brickd
                 // Don't use device before ipcon is connected
 
                 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
-                    function(connectReason) {
+                    function (connectReason) {
                         // Switch on a type A socket with house code 17 and receiver code 1.
                         // House code 17 is 10001 in binary (least-significant bit first)
                         // and means that the DIP switches 1 and 5 are on and 2-4 are off.

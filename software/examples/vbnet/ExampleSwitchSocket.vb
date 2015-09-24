@@ -1,3 +1,4 @@
+Imports System
 Imports Tinkerforge
 
 Module ExampleSwitchSocket
@@ -19,8 +20,8 @@ Module ExampleSwitchSocket
         ' and means that the DIP switch A is on and B-E are off.
         rs.SwitchSocketA(17, 1, BrickletRemoteSwitch.SWITCH_TO_ON)
 
-        System.Console.WriteLine("Press key to exit")
-        System.Console.ReadLine()
+        Console.WriteLine("Press key to exit")
+        Console.ReadLine()
         ipcon.Disconnect()
     End Sub
 End Module

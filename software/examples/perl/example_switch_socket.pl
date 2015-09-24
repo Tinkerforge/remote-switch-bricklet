@@ -20,6 +20,6 @@ $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # and means that the DIP switch A is on and B-E are off.
 $rs->switch_socket_a(17, 1, $rs->SWITCH_TO_ON);
 
-print "Press any key to exit...\n";
+print "Press key to exit\n";
 <STDIN>;
 $ipcon->disconnect();

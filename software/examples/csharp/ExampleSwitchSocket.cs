@@ -1,3 +1,4 @@
+using System;
 using Tinkerforge;
 
 class Example
@@ -21,8 +22,8 @@ class Example
 		// and means that the DIP switch A is on and B-E are off.
 		rs.SwitchSocketA(17, 1, BrickletRemoteSwitch.SWITCH_TO_ON);
 
-		System.Console.WriteLine("Press enter to exit");
-		System.Console.ReadLine();
+		Console.WriteLine("Press enter to exit");
+		Console.ReadLine();
 		ipcon.Disconnect();
 	}
 }
