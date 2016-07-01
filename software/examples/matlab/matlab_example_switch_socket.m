@@ -4,7 +4,7 @@ function matlab_example_switch_socket()
 
     HOST = 'localhost';
     PORT = 4223;
-    UID = 'XYZ'; % Change to your UID
+    UID = 'XYZ'; % Change XYZ to the UID of your Remote Switch Bricklet
 
     ipcon = IPConnection(); % Create IP connection
     rs = handle(BrickletRemoteSwitch(UID, ipcon), 'CallbackProperties'); % Create device object

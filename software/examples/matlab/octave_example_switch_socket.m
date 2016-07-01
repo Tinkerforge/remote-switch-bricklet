@@ -3,7 +3,7 @@ function octave_example_switch_socket()
 
     HOST = "localhost";
     PORT = 4223;
-    UID = "XYZ"; % Change to your UID
+    UID = "XYZ"; % Change XYZ to the UID of your Remote Switch Bricklet
 
     ipcon = java_new("com.tinkerforge.IPConnection"); % Create IP connection
     rs = java_new("com.tinkerforge.BrickletRemoteSwitch", UID, ipcon); % Create device object

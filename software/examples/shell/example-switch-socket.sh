@@ -1,7 +1,7 @@
 #!/bin/sh
 # Connects to localhost:4223 by default, use --host and --port to change this
 
-uid=XYZ # Change to your UID
+uid=XYZ # Change XYZ to the UID of your Remote Switch Bricklet
 
 # Switch on a type A socket with house code 17 and receiver code 1.
 # House code 17 is 10001 in binary (least-significant bit first)

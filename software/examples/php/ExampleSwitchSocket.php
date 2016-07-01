@@ -8,7 +8,7 @@ use Tinkerforge\BrickletRemoteSwitch;
 
 const HOST = 'localhost';
 const PORT = 4223;
-const UID = 'XYZ'; // Change to your UID
+const UID = 'XYZ'; // Change XYZ to the UID of your Remote Switch Bricklet
 
 $ipcon = new IPConnection(); // Create IP connection
 $rs = new BrickletRemoteSwitch(UID, $ipcon); // Create device object
