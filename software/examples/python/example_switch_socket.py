@@ -22,5 +22,5 @@ if __name__ == "__main__":
     # and means that the DIP switch A is on and B-E are off.
     rs.switch_socket_a(17, 1, rs.SWITCH_TO_ON)
 
-    raw_input("Press key to exit\n") # Use input() in Python 3
+    input("Press key to exit\n") # Use raw_input() in Python 2
     ipcon.disconnect()
