@@ -6,4 +6,4 @@ setup:
 	# and means that the DIP switches 1 and 5 are on and 2-4 are off.
 	# Receiver code 1 is 10000 in binary (least-significant bit first)
 	# and means that the DIP switch A is on and B-E are off.
-	publish '{"house_code": 17, "receiver_code": 1, "switch_to": "on"}' to tinkerforge/request/remote_switch_bricklet/XYZ/switch_socket_a 
+	publish '{"house_code": 17, "receiver_code": 1, "switch_to": "on"}' to tinkerforge/request/remote_switch_bricklet/XYZ/switch_socket_a
